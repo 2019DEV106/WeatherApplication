@@ -20,9 +20,11 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(WeatherAppController.class)
 public class WeatherAppControllerTest {
 
+	 
 	@InjectMocks
 	private WeatherAppController weatherAppController;
-
+	
+	
 	@Autowired
 	MockMvc mockMvc;
 
@@ -30,29 +32,50 @@ public class WeatherAppControllerTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(weatherAppController);
 	}
-
 	@Test
-	public void testWeatherReportReturnNotFoundForInvalidURL() throws Exception {
-		mockMvc.perform(get("/home").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+	public void testWeatherReportReturnNotFoundForInvalidURL() throws Exception{
+		mockMvc.perform(get("/home")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
 	}
-
+	 
 	@Test
-	public void testWeatherReportReturnsMethodNotAllowedForPost() throws Exception {
+	public void testWeatherReportReturnSuccessForValidURL() throws Exception{
 
-		mockMvc.perform(post("/weatherReport").contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isMethodNotAllowed());
+		mockMvc.perform(get("/weatherReport")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
 	}
-
+	  
 	@Test
-	public void testWeatherReportReturnSuccessForValidURL() throws Exception {
-
-		mockMvc.perform(get("/weatherReport").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-	}
-
-	@Test
-	public void testWeatherReportReturnNotNullResponse() throws Exception {
+	public void testWeatherReportReturnNotNullResponse() throws Exception{
 		String result = weatherAppController.weatherReport();
 		assertEquals("weatherInfo", result);
 	}
 
+	@Test
+	public void testWeatherReportReturnsBadRequestForPost() throws Exception{
+
+		mockMvc.perform(post("/weatherReport")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	public void testPrepareWeatherReportReturnsNotFoundForInvalidURL() throws Exception{
+		mockMvc.perform(post("/weatherReports")
+				.param("latitude", "12350.8503").param("longitude", "4.3517")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
+	}
+	 
+	
+	@Test
+	public void testPrepareWeatherReportReturnsValidResponse() throws Exception{
+
+		mockMvc.perform(post("/weatherReport").param("latitude", "12350.8503").param("longitude", "4.3517")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+	}
+	
 }

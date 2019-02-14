@@ -1,5 +1,7 @@
 package com.weatherapp.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -95,6 +97,22 @@ public class WeatherAppServiceImplTest {
 
 	}
 	
+	@Test
+	public void testfetchweatherInfoReturnSuccessResponse() throws Exception {
+		ResponseEntity<String> response = new ResponseEntity<String>("{\"name\":\"Brussels\"}", HttpStatus.OK);
+		when(restTemplate.getForEntity(WeatherAppConstants.WHEATHER_API_URI+"lat=50.8503&lon=4.3517", String.class))
+		.thenReturn(response);
+		WeatherData weatherDataTest = new WeatherData();
+		weatherDataTest.setName("Brussels");
+		when(objectMapper.readValue("{\"name\":\"Brussels\"}", WeatherData.class)).thenReturn(weatherDataTest);
+		WeatherData weatherDataActual = weatherAppService.fetchweatherInfo("lat=50.8503&lon=4.3517");
+		assertNotNull(weatherDataActual);
+		assertEquals(weatherDataTest.getName(), weatherDataActual.getName());
+		verify(restTemplate, times(1)).getForEntity(WeatherAppConstants.WHEATHER_API_URI+"lat=50.8503&lon=4.3517", String.class);
+		verify(objectMapper, times(1)).readValue("{\"name\":\"Brussels\"}", WeatherData.class);
+
+	}
+
 
 
 }

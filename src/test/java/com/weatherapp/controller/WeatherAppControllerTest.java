@@ -20,11 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(WeatherAppController.class)
 public class WeatherAppControllerTest {
 
-	 
 	@InjectMocks
 	private WeatherAppController weatherAppController;
-	
-	
+
 	@Autowired
 	MockMvc mockMvc;
 
@@ -32,33 +30,29 @@ public class WeatherAppControllerTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(weatherAppController);
 	}
-	@Test
-	public void testWeatherReportReturnNotFoundForInvalidURL() throws Exception{
-		mockMvc.perform(get("/home")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound());
-	}
-	 
-	@Test
-	public void testWeatherReportReturnSuccessForValidURL() throws Exception{
 
-		mockMvc.perform(get("/weatherReport")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk());
-	}
-	  
 	@Test
-	public void testWeatherReportReturnNotNullResponse() throws Exception{
+	public void testWeatherReportReturnNotFoundForInvalidURL() throws Exception {
+		mockMvc.perform(get("/home").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void testWeatherReportReturnsMethodNotAllowedForPost() throws Exception {
+
+		mockMvc.perform(post("/weatherReport").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isMethodNotAllowed());
+	}
+
+	@Test
+	public void testWeatherReportReturnSuccessForValidURL() throws Exception {
+
+		mockMvc.perform(get("/weatherReport").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+	}
+
+	@Test
+	public void testWeatherReportReturnNotNullResponse() throws Exception {
 		String result = weatherAppController.weatherReport();
 		assertEquals("weatherInfo", result);
 	}
 
-	@Test
-	public void testWeatherReportReturnsMethodNotAllowedForPost() throws Exception{
-
-		mockMvc.perform(post("/weatherReport")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isMethodNotAllowed());
-	}
-	
 }

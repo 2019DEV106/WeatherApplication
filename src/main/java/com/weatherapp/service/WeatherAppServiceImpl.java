@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -27,12 +28,13 @@ public class WeatherAppServiceImpl implements WeatherAppService {
 	public WeatherData fetchweatherInfo(String latitudeAndlongitude) throws WeatherException {
 
 		String weatherApiUri = WeatherAppConstants.WHEATHER_API_URI.concat(latitudeAndlongitude);
-		ResponseEntity<String> weatherApiResponse = restTemplate.getForEntity(weatherApiUri, String.class);
+		
 		try {
+			ResponseEntity<String> weatherApiResponse = restTemplate.getForEntity(weatherApiUri, String.class);
 			return mapper.readValue(weatherApiResponse.getBody(), WeatherData.class);
-		} catch (JsonMappingException e) {
-			throw new WeatherException("Exception during Json Mapping ", e);
-		} catch (JsonParseException e) {
+		} catch (RestClientException e) {
+			throw new WeatherException("Unable to invoke the service ", e);
+		} catch (JsonMappingException | JsonParseException e) {
 			throw new WeatherException("Exception during Json Parsing ", e);
 		} catch (IOException e) {
 			throw new WeatherException("IOException during API call ", e);

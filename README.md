@@ -26,7 +26,7 @@ Step 3 : Run the SpringBoot Application
 Step 4  : Launch  the URL http://localhost:8080/weatherReport in the browser
 
 <b> Jacoco Reports</b>
-    Jacoco Reports can be viewed in the below location 
+    Jacoco Reports can be viewed in the below location inside project directory
     
           target/site/jacoco/index.html
 <b>Sonar Reports </b>

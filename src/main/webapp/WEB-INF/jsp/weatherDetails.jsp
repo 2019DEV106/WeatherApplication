@@ -19,11 +19,15 @@
 
 	<table class="table table-striped">
 		<caption>
-			<strong>Brussels wheather</strong>
+			<strong>Weather Details</strong>
 		</caption>
 		<thead>
 		</thead>
 		<tbody>
+			<tr>
+				<td>Location</td>
+				<td>${weatherData.name}</td>
+			</tr>
 			<tr>
 				<td>humidity</td>
 				<td>${weatherData.weatherDetails.humidity}</td>

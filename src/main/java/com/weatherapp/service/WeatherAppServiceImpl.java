@@ -26,10 +26,10 @@ public class WeatherAppServiceImpl implements WeatherAppService {
 	@Override
 	public WeatherData fetchweatherInfo(String latitudeAndlongitude) throws WeatherException {
 
-		String uri = WeatherAppConstants.WHEATHER_API_URI + latitudeAndlongitude;
-		ResponseEntity<String> response = restTemplate.getForEntity(uri, String.class);
+		String weatherApiUri = WeatherAppConstants.WHEATHER_API_URI.concat(latitudeAndlongitude);
+		ResponseEntity<String> weatherApiResponse = restTemplate.getForEntity(weatherApiUri, String.class);
 		try {
-			return mapper.readValue(response.getBody(), WeatherData.class);
+			return mapper.readValue(weatherApiResponse.getBody(), WeatherData.class);
 		} catch (JsonMappingException e) {
 			throw new WeatherException("Exception during Json Mapping ", e);
 		} catch (JsonParseException e) {

@@ -25,9 +25,9 @@ public class WeatherAppController {
 
 	@PostMapping(value = "/weatherReport")
 	public String prepareWeatherReport(ModelMap model, @RequestParam String latitude, @RequestParam String longitude) {
-		String latitudeAndlongitude = "lat=" + latitude + "&lon=" + longitude;
+		StringBuilder latitudeAndlongitude = new StringBuilder("lat=").append(latitude).append("&lon=").append(longitude);
 		try {
-			model.put("weatherData", weatherAppServiceImpl.fetchweatherInfo(latitudeAndlongitude));
+			model.put("weatherData", weatherAppServiceImpl.fetchweatherInfo(String.valueOf(latitudeAndlongitude.toString())));
 			return "weatherDetails";
 		} catch (WeatherException e) {
 			return "errorPage";

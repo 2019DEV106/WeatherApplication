@@ -2,6 +2,7 @@ package com.weatherapp.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
@@ -52,6 +53,12 @@ public class WeatherAppControllerTest {
 		assertEquals("weatherInfo", result);
 	}
 
-	 
+	@Test
+	public void testWeatherReportReturnsMethodNotAllowedForPost() throws Exception{
+
+		mockMvc.perform(post("/weatherReport")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isMethodNotAllowed());
+	}
 	
 }

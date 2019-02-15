@@ -86,7 +86,7 @@ public class WeatherAppServiceImplTest {
 		verify(objectMapper, times(1)).readValue("not a json", WeatherData.class);
 	}
 
-	@Test(expected= RestClientException.class)
+	@Test(expected= WeatherException.class)
 	public void testRestClientExceptionDuringAPICall() throws Exception {
 		when(restTemplate.getForEntity(WeatherAppConstants.WHEATHER_API_URI+"lat=50.8503&lon=4.3517", String.class))
 				.thenThrow(RestClientException.class);

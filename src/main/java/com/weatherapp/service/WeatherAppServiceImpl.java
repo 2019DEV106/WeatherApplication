@@ -28,7 +28,7 @@ public class WeatherAppServiceImpl implements WeatherAppService {
 	public WeatherData fetchweatherInfo(String latitudeAndlongitude) throws WeatherException {
 
 		String weatherApiUri = WeatherAppConstants.WHEATHER_API_URI.concat(latitudeAndlongitude);
-		
+
 		try {
 			ResponseEntity<String> weatherApiResponse = restTemplate.getForEntity(weatherApiUri, String.class);
 			return mapper.readValue(weatherApiResponse.getBody(), WeatherData.class);
